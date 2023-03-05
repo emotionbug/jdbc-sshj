@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.connection.channel.direct.LocalPortForwarder;
 import net.schmizz.sshj.connection.channel.direct.Parameters;
@@ -128,7 +129,7 @@ public class SshTunnel extends AbstractTunnel {
           && queryParameters.get(PRIVATE_KEY).length() > 0) {
         String keyFile = queryParameters.get(PRIVATE_KEY);
         // Shell expansion
-        keyFile = keyFile.replaceFirst("^~", System.getProperty("user.home"));
+        keyFile = keyFile.replaceFirst("^~", Matcher.quoteReplacement(System.getProperty("user.home")));
 
         String keyPassword = queryParameters.get(PRIVATE_KEY_PASSWORD);
         KeyFileFormat keyFileFormat;
@@ -164,7 +165,7 @@ public class SshTunnel extends AbstractTunnel {
             pubKeyFile = keyFile + ".pub";
           } else {
             // Shell expansion
-            pubKeyFile = pubKeyFile.replaceFirst("^~", System.getProperty("user.home"));
+            pubKeyFile = pubKeyFile.replaceFirst("^~", Matcher.quoteReplacement(System.getProperty("user.home")));
           }
           final File publicKey = new File(pubKeyFile);
           if (!publicKey.isFile()) {
