@@ -18,7 +18,7 @@ import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.connection.channel.direct.LocalPortForwarder;
 import net.schmizz.sshj.connection.channel.direct.Parameters;
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
-import net.schmizz.sshj.userauth.keyprovider.FileKeyProvider;
+import net.schmizz.sshj.userauth.keyprovider.KeyProvider;
 import net.schmizz.sshj.userauth.keyprovider.OpenSSHKeyFile;
 import net.schmizz.sshj.userauth.keyprovider.PuTTYKeyFile;
 import net.schmizz.sshj.userauth.method.AuthMethod;
@@ -130,15 +130,11 @@ public class SshTunnel extends AbstractTunnel {
         // Shell expansion
         keyFile = keyFile.replaceFirst("^~", System.getProperty("user.home"));
 
-        String keyPassword = queryParameters.get(PRIVATE_KEY_PASSWORD);
-        KeyFileFormat keyFileFormat;
+        final String keyPassword = queryParameters.get(PRIVATE_KEY_PASSWORD);
+        final KeyFileFormat keyFileFormat;
         if (queryParameters.get(PRIVATE_KEY_FILE_FORMAT) == null
             || queryParameters.get(PRIVATE_KEY_FILE_FORMAT).length() == 0) {
-          if (keyFile.toLowerCase().endsWith(".ppk")) {
-            keyFileFormat = KeyFileFormat.PUTTY;
-          } else {
-            keyFileFormat = KeyFileFormat.OPENSSH;
-          }
+          keyFileFormat = null;
         } else {
           keyFileFormat = KeyFileFormat
               .valueOf(queryParameters.get(PRIVATE_KEY_FILE_FORMAT).toUpperCase().trim());
@@ -149,15 +145,17 @@ public class SshTunnel extends AbstractTunnel {
           throw new FileNotFoundException("Could not find private key file " + keyFile + "!");
         }
 
-        FileKeyProvider fkp;
+        final KeyProvider fkp;
         if (keyFileFormat == KeyFileFormat.PUTTY) {
-          fkp = new PuTTYKeyFile();
+          PuTTYKeyFile p = new PuTTYKeyFile();
           if (keyPassword != null) {
-            fkp.init(privateKey, new PlainPasswordFinder(keyPassword));
+            p.init(privateKey, new PlainPasswordFinder(keyPassword));
           } else {
-            fkp.init(privateKey);
+            p.init(privateKey);
           }
-        } else {
+
+          fkp = p;
+        } else if (keyFileFormat == KeyFileFormat.OPENSSH) {
           OpenSSHKeyFile o = new OpenSSHKeyFile();
           String pubKeyFile = queryParameters.get(PUBLIC_KEY);
           if (pubKeyFile == null || pubKeyFile.length() == 0) {
@@ -193,6 +191,14 @@ public class SshTunnel extends AbstractTunnel {
           }
 
           fkp = o;
+        } else {
+          // If URL does not specify a key file format, let SshJ infer it
+          // This has the additional benefit of supporting newer OpenSSH key formats
+          if (keyPassword != null) {
+            fkp = client.loadKeys(keyFile, keyPassword);
+          } else {
+            fkp = client.loadKeys(keyFile);
+          }
         }
 
         methods.add(new AuthPublickey(fkp));

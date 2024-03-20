@@ -44,24 +44,18 @@ jdbc:sshj://[user@]<host>[:<port>]
 	<your-original-url-with-{{port}}>
 ```
 
-| Parameter | Description | Example |                                                                       
-| --- | --- | --- |                         
-| *jdbc:sshj://<host>[:<port>]* | The *host* and *
-port* of the remote SSH server. Port is optional. | `jdbc:sshj://demo.example.org` |
-| *remote* | The *host* and *port* of the database on the remote server. | `10.11.12.13:5432` |
-| *
-username* | The SSH username. Alternatively, specify it before the `@` sign in the host name | `demo` |
-| *password*| The SSH password, if you want to try password authentication. | `demo123` |
-| *
-public.key.file* | Path to the file with the public key. Sometimes needed if not embedded in private key or not on assumed location. | `~/.ssh/id_rsa.pub` |
-| *
-private.key.file* | Path to the file with a private key. Please note that [newer OpenSSH keys are not yet supported](https://github.com/hierynomus/sshj/issues/276).  | `~/.ssh/id_rsa` |
-| *private.key.password* | Password for the private key, if any. | `demo1234` |
-| *
-private.key.file.format* | File format. Putty private key files and OpenSSH files are accepted. By default it tries to load OPENSSH format. | `PUTTY` | 
-| *drivers* | Comma separated list of drivers (class files) to preload. | `org.postgresql.Driver` | 
-| *
-verify_hosts* | Supress host verification. Driver will not complain on new/unknown hosts. | `off` | 
+| Parameter                     | Description                                                                                                                                              | Example                        |
+|-------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------|
+| *jdbc:sshj://<host>[:<port>]* | The *host* and *port* of the remote SSH server. Port is optional.                                                                                        | `jdbc:sshj://demo.example.org` |
+| *remote*                      | The *host* and *port* of the database on the remote server.                                                                                              | `10.11.12.13:5432`             |
+| *username*                    | The SSH username. Alternatively, specify it before the `@` sign in the host name                                                                         | `demo`                         |
+| *password*                    | The SSH password, if you want to try password authentication.                                                                                            | `demo123`                      |
+| *public.key.file*             | Path to the file with the public key. Sometimes needed if not embedded in private key or not on assumed location.                                        | `~/.ssh/id_rsa.pub`            |
+| *private.key.file*            | Path to the file with a private key.                                                                                                                     | `~/.ssh/id_rsa`                |
+| *private.key.password*        | Password for the private key, if any.                                                                                                                    | `demo1234`                     |
+| *private.key.file.format*     | Optional private key file format. `PUTTY` or `OPENSSH` are accepted, mainly for backward compatibility. If omitted (recommended) let SshJ detect format. | `PUTTY`                        | 
+| *drivers*                     | Comma separated list of drivers (class files) to preload.                                                                                                | `org.postgresql.Driver`        | 
+| *verify_hosts*                | Suppress host verification. Driver will not complain on new/unknown hosts.                                                                               | `off`                          | 
 
 The JDBC-SSHJ NATIVE uses the following syntax:
 
@@ -73,22 +67,19 @@ jdbc:sshj-native://<any-parameters-which-you-might-send-to-ssh>
 	<your-original-url-with-{{port}}>
 ```
 
-| Parameter | Description | Example |                                                                       
-| --- | --- | --- |                         
-| *
-any-parameters-which-you-might-send-to-ssh* | Anything you type here is going to be echoed directly to the SSH command | `-c demo@demo.example.org -r` | 
-| *
-keepalive.command* | Command to run on the remote server to keep the session alive. If not set, your session *
-might* timeout. | `ping localhost` |
+| Parameter                                    | Description                                                                                              | Example                       |
+|----------------------------------------------|----------------------------------------------------------------------------------------------------------|-------------------------------|
+| *any-parameters-which-you-might-send-to-ssh* | Anything you type here is going to be echoed directly to the SSH command                                 | `-c demo@demo.example.org -r` | 
+| *keepalive.command*                          | Command to run on the remote server to keep the session alive. If not set, your session *might* timeout. | `ping localhost`              |
 
 Please note that the driver will open a local port and forward it to the server. It will inject the local host and port
 into your original JDBC URL when it sees the text `{{host}}` and `{{port}}`, respectively.
 
-Driver will listen on a local IP in the range from 127.0.1.2 - 127.0.1.200 and a random port in the range of 20000 -
-
-20110. On OS X, though, only 127.0.0.1 is used, as Mac by default doesn't listen to anything else than this IP. See
-       [StackOverflow](https://superuser.com/questions/458875/how-do-you-get-loopback-addresses-other-than-127-0-0-1-to-work-on-os-x)
-       for more details on this.
+Driver will listen on a local IP in the range from 127.0.1.2 - 127.0.1.200 and a random port in the range of
+20000 - 20110. On OS X, though, only 127.0.0.1 is used, as Mac by default doesn't listen to anything else than this IP.
+See
+[StackOverflow](https://superuser.com/questions/458875/how-do-you-get-loopback-addresses-other-than-127-0-0-1-to-work-on-os-x)
+for more details on this.
 
 ### Example
 
@@ -115,18 +106,18 @@ jdbc:sshj://demo.example.org
 If you just want to compile the project without running the tests:
 
 ```
-mvn -DskipTests clean install
+./gradlew clean build
 ```
 
 If you want to run the tests (Derby and H2 in server mode):
 
 ```
-mvn clean install
+./gradlew clean test
 ```
 
-## dependencies
+## Dependencies
 
-You can setup your dependencies like this:
+You can set up your dependencies like this:
 
 - Maven
   ```xml

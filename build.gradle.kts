@@ -30,7 +30,7 @@ checkstyle {
 }
 
 dependencies {
-    implementation("com.hierynomus", "sshj", "0.31.0")
+    implementation("com.hierynomus", "sshj", "0.34.0")
     implementation("org.slf4j", "slf4j-api", "1.7.30")
     testImplementation("org.postgresql", "postgresql", "42.2.19")
     testImplementation("ch.qos.logback", "logback-classic", "1.2.3")
@@ -46,7 +46,7 @@ dependencies {
 }
 
 group = "io.github.emotionbug"
-version = "1.0.13"
+version = "1.0.14"
 description = "JDBC over SSH"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
