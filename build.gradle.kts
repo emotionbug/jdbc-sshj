@@ -9,7 +9,7 @@ plugins {
     `maven-publish`
     id("com.github.johnrengelman.shadow") version "6.1.0"
     id("io.github.gradle-nexus.publish-plugin") version "1.0.0"
-    id("se.bjurr.gitchangelog.git-changelog-gradle-plugin") version "1.71.4"
+//    id("se.bjurr.gitchangelog.git-changelog-gradle-plugin") version "1.71.4"
 }
 
 repositories {
@@ -30,8 +30,8 @@ checkstyle {
 }
 
 dependencies {
-    implementation("com.hierynomus", "sshj", "0.34.0")
-    implementation("org.slf4j", "slf4j-api", "1.7.30")
+    implementation("com.hierynomus", "sshj", "0.38.0")
+    implementation("org.slf4j", "slf4j-api", "2.0.12")
     testImplementation("org.postgresql", "postgresql", "42.2.19")
     testImplementation("ch.qos.logback", "logback-classic", "1.2.3")
     testImplementation("mysql", "mysql-connector-java", "8.0.23")
@@ -115,8 +115,8 @@ tasks.test {
     useTestNG()
 }
 
-val gitChangelogTask by tasks.registering(se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask::class) {
-    fromRepo = "$projectDir"
-    file = File(projectDir, "CHANGELOG.md")
-    templateContent = file("CHANGELOG.template").readText()
-}
+//val gitChangelogTask by tasks.registering(se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask::class) {
+//    fromRepo = "$projectDir"
+//    file = File(projectDir, "CHANGELOG.md")
+//    templateContent = file("CHANGELOG.template").readText()
+//}

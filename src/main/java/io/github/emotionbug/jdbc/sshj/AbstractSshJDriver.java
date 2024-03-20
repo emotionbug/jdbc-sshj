@@ -51,7 +51,7 @@ public abstract class AbstractSshJDriver implements Driver {
   }
 
   protected Connection getRealConnection(AbstractTunnel tunnel, Properties info, String originalUrl,
-      String newHost, String newPort) throws SQLException {
+                                         String newHost, String newPort) throws SQLException {
     originalUrl = originalUrl.replaceAll("\\{\\{[hH][oO][sS][tT]\\}\\}", newHost);
     originalUrl = originalUrl.replaceAll("\\{\\{[pP][oO][rR][tT]\\}\\}", newPort);
 

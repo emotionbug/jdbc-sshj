@@ -193,19 +193,19 @@ public class SshConnection implements Connection {
 
   @Override
   public Statement createStatement(int resultSetType, int resultSetConcurrency,
-      int resultSetHoldability) throws SQLException {
+                                   int resultSetHoldability) throws SQLException {
     return wrapped.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
   }
 
   @Override
   public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency,
-      int resultSetHoldability) throws SQLException {
+                                            int resultSetHoldability) throws SQLException {
     return wrapped.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
   }
 
   @Override
   public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency,
-      int resultSetHoldability) throws SQLException {
+                                       int resultSetHoldability) throws SQLException {
     return wrapped.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
   }
 
